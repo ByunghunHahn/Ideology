@@ -24,7 +24,7 @@
 					 ytitle("`ytitle'", size(medlarge)) ///
 					 xtitle("Relative Time From Election", size(med)) ///
 					 ylabel(`ylabel', labsize(medlarge)) `legend' ///
-					 saving("Results/Graph/`name'", replace)
+					 saving("Results/New_Graph/`name'", replace)
 		}
 		else {
 			twoway (scatter coef_sum t if y == "`yvar'", color(ebblue) symbol(O)) ///
@@ -34,7 +34,7 @@
 					 ytitle("`ytitle'", size(medlarge)) ///
 					 xtitle("Relative Time From Election", size(med)) ///
 					 ylabel(`ylabel', labsize(medlarge)) `legend' ///
-					 saving("Results/Graph/`name'", replace)
+					 saving("Results/New_Graph/`name'", replace)
 		}
 	end
 	
@@ -90,7 +90,7 @@
 		   , xtitle("Vote Margin") legend(off) graphregion(color(white)) xlabel(-`xrange' 0 `xrange', labsize(*1.5)) xscale(range(-`xrange' `xrange')) ///
 		  note("{&beta} = `coef' [`ci_l',`ci_h']", ring(0) pos(1) size(*1.5)) ///
 		   ylabel(`ylab') xlabel(`xlab') `ytitle' `xtitle' `subtitle' plotregion(margin(zero)) ///
-		   saving("Results/Graph/`name'", replace)
+		   saving("Results/New_Graph/`name'", replace)
 		   *note("{&beta} = `coef' [`ci_l',`ci_h']" "Baseline mean = `ymean'", ring(0) pos(1) size(*1.5)) ///
 		
 		}   
@@ -133,7 +133,7 @@
 		   , xtitle("Vote Margin") legend(off) graphregion(color(white)) xlabel(-`xrange' 0 `xrange', labsize(*1.5)) xscale(range(-`xrange' `xrange')) ///
 		   note("{&beta} = `coef' [`ci_l',`ci_h']" "Baseline mean = `ymean'", ring(0) pos(1) size(*2)) ///
 		   ylabel(`ylab') xlabel(`xlab') `ytitle' `xtitle' `subtitle' plotregion(margin(zero)) ///
-		   saving("Results/Graph/`name'", replace)  	
+		   saving("Results/New_Graph/`name'", replace)  	
 		}
 		   
 	end
@@ -175,6 +175,6 @@ program define plot_rd_coef, rclass
 		legend(off) xline(0) ytitle("") ///
 		title("`title_text'") subtitle("`subtitle'", box) ///
 		xsize(3) ysize(4) ylabel(`ylabel', labsize(medlarge)) xlabel(`xlabel') ///
-		saving("Results/Graph/`name'", replace)
+		saving("Results/New_Graph/`name'", replace)
 end
 	

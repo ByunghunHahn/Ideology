@@ -10,9 +10,9 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-global grpath ="Results/Graph"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+global grpath ="Results/New_Graph"
 
 global flag_balance = 0 // 0 if main rd 1 if balance
 if $flag_balance==0 {
@@ -54,7 +54,7 @@ program define rd_plot_wrapper
 		[flag_balance(integer 0)] [level(integer 0)] ///
 		[weights(string)]
  
-  use "data_for_rd/with_missing/dist_votes_`data'.dta" if dist_cnty~=1, clear
+  use "data_for_rd/with_missing/votes_`data'.dta" if dist_cnty~=1, clear
  * year dummies and lags 
 tab year, g(yr_)
 egen id_election= group(leaid year_elected) // should be unique up to multi_raceid; multi_raceid is a string variable thus to be used for std err clustering, we need another numeric variable
@@ -80,26 +80,26 @@ rd_plot_wrapper, data("equity_prior") yvar("n_mtn_equity") yearcond("$year_cond0
     ytitle("ytitle(N Passed, size(*1.5))") xtitle("") ///
     subtitle("subtitle(Equity Motions, ring(1) pos(12) size(*1.5))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_mtn_equity.png", replace
+	gr export "Results/New_Graph/rd_mtn_equity.png", replace
 
 rd_plot_wrapper, data("equity_prior") yvar("n_mtn_equity") yearcond("$year_cond0") ///
     ylab("0(10)30, labsize(*2)") xrange(10) ///
     ytitle("ytitle(N Passed Equity Motions, size(*2))") xtitle("xtitle(., size(*0.05))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_mtn_equity_b.png", replace
+	gr export "Results/New_Graph/rd_mtn_equity_b.png", replace
 	
 rd_plot_wrapper, data("equity_prior") yvar("equity_yes_votes_mg1") yearcond("$year_cond0") ///
     ylab("-0.2(.2).6, labsize(*1.5)") xrange(10) ///
     ytitle("ytitle(Marginal Yes Votes, size(*1.5))") ///
     subtitle("subtitle(Equity Motions, ring(1) pos(12) size(*1.5))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_votes_equity_mg1.png", replace
+	gr export "Results/New_Graph/rd_votes_equity_mg1.png", replace
 
 rd_plot_wrapper, data("equity_prior") yvar("equity_yes_votes_mg1") yearcond("$year_cond0") ///
     ylab("-0.2(.2).6, labsize(*2)") xrange(10) ///
     ytitle("ytitle(Pivotal Yes on Passed Equity Votes, size(*2))") xtitle("xtitle(., size(*0.05))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_votes_equity_mg1_b.png", replace
+	gr export "Results/New_Graph/rd_votes_equity_mg1_b.png", replace
 
 	
 * Budget Hawk 
@@ -108,26 +108,26 @@ rd_plot_wrapper, data("budget_hawk") yvar("n_mtn_budget") yearcond("$year_cond0"
     ytitle("ytitle(N Passed, size(*1.5))") ///
     subtitle("subtitle(Budget Motions, ring(1) pos(12) size(*1.5))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_mtn_budget.png", replace
+	gr export "Results/New_Graph/rd_mtn_budget.png", replace
 
 rd_plot_wrapper, data("budget_hawk") yvar("n_mtn_budget") yearcond("$year_cond0") ///
     ylab("20(20)60, labsize(*2)") xrange(10) ///
     ytitle("ytitle(N Passed Budget Motions, size(*2))") xtitle("xtitle(., size(*0.05))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_mtn_budget_b.png", replace
+	gr export "Results/New_Graph/rd_mtn_budget_b.png", replace
 	
 rd_plot_wrapper, data("budget_hawk") yvar("budget_yes_votes_mg1") yearcond("$year_cond0") ///
     ylab("-0.2(.2).6, labsize(*1.5)") xrange(10) ///
     ytitle("ytitle(Marginal Yes Votes, size(*1.5))") ///
     subtitle("subtitle(Budget Motions, ring(1) pos(12) size(*1.5))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_votes_budget_mg1.png", replace
+	gr export "Results/New_Graph/rd_votes_budget_mg1.png", replace
 	
 rd_plot_wrapper, data("budget_hawk") yvar("budget_yes_votes_mg1") yearcond("$year_cond0") ///
     ylab("-0.2(.2).6, labsize(*2)") xrange(10) ///
     ytitle("ytitle(Pivotal Yes on Passed Budget Motions, size(*1.8))") xtitle("xtitle(., size(*0.05))") ///
     flag_balance(0) cluster("nncluster") level(1) 
-	gr export "Results/Graph/rd_votes_budget_mg1_b.png", replace	
+	gr export "Results/New_Graph/rd_votes_budget_mg1_b.png", replace	
 
 
 

@@ -11,8 +11,8 @@ clear all
 eststo clear
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
 
 global y_rev ="rev_cte_per_stu"
 global y_fiscal= "exp_total_per_stu exp_capital_total_per_stu bond_amount_per_stu"
@@ -106,7 +106,7 @@ end
 * II. A table with a few examples
 ********************************************************************************
 
-	use "data_for_rd/$missing/dist_stacked.dta", clear
+	use "data_for_rd/$missing/stacked.dta", clear
 	g log_enrollment = log(enrollment)
 	ren *vocational* *cte*
 	
@@ -209,7 +209,7 @@ end
 	* -------------------------------------------
 	global tab_opt = "b(a3) se(3) scalars(N r2) label nostar"
 
-	esttab using "Results/Tex/outcome_joint_body.tex", ///
+	esttab using "Results/New_Tex/outcome_joint_body.tex", ///
 		keep(*T2*_S) $tab_opt ///
 		replace ///
 		fragment ///
@@ -255,10 +255,10 @@ end
 	* 6. Final LaTeX table with joint test results
 	* -------------------------------------------
 
-	file open myfile using "Results/Tex/outcome_joint.tex", write replace
+	file open myfile using "Results/New_Tex/outcome_joint.tex", write replace
 
-	file write myfile "\input{../Results/Tex/outcome_joint_body.tex} \\\\" _n
-	file write myfile "\multicolumn{3}{l}{\textit{Joint Tests Results}} \\\\" _n
+	file write myfile "\input{tables_new/outcome_joint_body.tex} \\" _n
+	file write myfile "\multicolumn{3}{l}{\textit{Joint Tests Results}} \\" _n
 
 	local chi_iden_str = string(chi_iden, "%4.3f")
 	local p_iden_str   = string(p_iden, "%4.3f")
@@ -268,8 +268,8 @@ end
 	local p_ideo_str   = string(p_ideo, "%4.3f")
 	local df_ideo_str  = string(df_ideo, "%1.0f")
 
-	file write myfile "\multicolumn{3}{c}{\textbf{H\textsubscript{0}}: Identities jointly zero \hfill $\chi^2(`df_iden_str') = `chi_iden_str',\ p = `p_iden_str'$} \\\\" _n
-	file write myfile "\multicolumn{3}{c}{\textbf{H\textsubscript{0}}: Ideologies jointly zero \hfill $\chi^2(`df_ideo_str') = `chi_ideo_str',\ p = `p_ideo_str'$} \\\\" _n
+	file write myfile "\multicolumn{3}{c}{\textbf{H\textsubscript{0}}: Identities jointly zero \hfill $\chi^2(`df_iden_str') = `chi_iden_str',\ p = `p_iden_str'$} \\" _n
+	file write myfile "\multicolumn{3}{c}{\textbf{H\textsubscript{0}}: Ideologies jointly zero \hfill $\chi^2(`df_ideo_str') = `chi_ideo_str',\ p = `p_ideo_str'$} \" _n
 
 	file close myfile
 
@@ -278,72 +278,70 @@ end
 * IV. Joint testing across hypothesis types
 ********************************************************************************
 
-	file open myfile using "Results/Tex/joint_test_summary.tex", write replace
+	 file open myfile using "Results/New_Tex/joint_test_summary.tex", write replace
 
-	file write myfile "\begin{tabular}{lcccc}" _n
-	file write myfile "\toprule\midrule" _n
-	file write myfile " & \multicolumn{2}{c}{\textbf{H\textsubscript{0}}: Identities jointly zero} & \multicolumn{2}{c}{\textbf{H\textsubscript{0}}: Ideologies jointly zero} \\" _n
-	file write myfile " & (p-value)  & (p-value) \\" _n
-	file write myfile " & (1)  & (2) \\" _n
-	file write myfile "\midrule" _n
+    file write myfile "\begin{tabular}{lcc}" _n
+    file write myfile "\toprule\midrule" _n
 
-	* Panel A: Identity and Ideology
-	file write myfile "\multicolumn{5}{c}{Panel A: Identity and Ideology Variables Tested Simultaneously} \\\\" _n
+    file write myfile " & \textbf{H\textsubscript{0}: Identities jointly zero} & \textbf{H\textsubscript{0}: Ideologies jointly zero} \\" _n
+    file write myfile " & (p-value)  & (p-value) \\" _n
+    file write myfile " & (1)  & (2) \\" _n
+    file write myfile "\midrule" _n
 
-	foreach htype in 1 2 3 {
-		if `htype' == 1 global h0_type "h_type_exact==1"
-		if `htype' == 2 global h0_type "h_type_exact==2"
-		if `htype' == 3 global h0_type "h_type_exact<."
+    * Panel A
+    file write myfile "\multicolumn{3}{c}{Panel A: Identity and Ideology Variables Tested Simultaneously} \\\\" _n
 
-		local label = cond(`htype'==1, "Examined in Prior Studies", ///
-						   cond(`htype'==2, "Augmented Using Ideological Differences", "All Identities and Ideologies"))
+    foreach htype in 1 2 3 {
+        if `htype' == 1 global h0_type "h_type_exact==1"
+        if `htype' == 2 global h0_type "h_type_exact==2"
+        if `htype' == 3 global h0_type "h_type_exact<."
 
-		global flag_iden_only = 0
-		ereturn clear
-		estimates clear
-		eststo clear
+        local label = cond(`htype'==1, "Examined in Prior Studies", ///
+                           cond(`htype'==2, "Augmented Using Ideological Differences", "All Identities and Ideologies"))
 
-		do 5_f_joint_RD_testing.do
+        global flag_iden_only = 0
+        ereturn clear
+        estimates clear
+        eststo clear
 
-		local chi_iden_str = "\$\chi^2$(`=string(df_iden)') = `=string(chi_iden,"%4.2f")'"
-		local chi_ideo_str = "\$\chi^2$(`=string(df_ideo)') = `=string(chi_ideo,"%4.2f")'"
-		local p_iden_str = string(p_iden,"%4.3f")
-		local p_ideo_str = string(p_ideo,"%4.3f")
+        do 5_f_joint_RD_testing_new.do
 
-		file write myfile "`label'" ///
-			" & `p_iden_str'" ///
-			" & `p_ideo_str' \\\\" _n
-	}
+        local chi_iden_str = "\$\chi^2$(`=string(df_iden)') = `=string(chi_iden,"%4.2f")'"
+        local chi_ideo_str = "\$\chi^2$(`=string(df_ideo)') = `=string(chi_ideo,"%4.2f")'"
+        local p_iden_str = string(p_iden,"%4.3f")
+        local p_ideo_str = string(p_ideo,"%4.3f")
 
-	file write myfile "\multicolumn{5}{c}{Panel B: Identity and Ideology Variables Tested Separately} \\" _n
+        file write myfile "`label' & `p_iden_str' & `p_ideo_str' \\\\" _n
+    }
 
-	* Panel B: Identity or Ideology
-	foreach htype in 1 2 3 {
-		if `htype' == 1 global h0_type "h_type_exact==1"
-		if `htype' == 2 global h0_type "h_type_exact==2"
-		if `htype' == 3 global h0_type "h_type_exact<."
+    * Panel B
+    file write myfile "\multicolumn{3}{c}{Panel B: Identity and Ideology Variables Tested Separately} \\\\" _n
 
-		local label = cond(`htype'==1, "Examined in Prior Studies", ///
-						   cond(`htype'==2, "Augmented Using Ideological Differences", "All Identities and Ideologies"))
+    foreach htype in 1 2 3 {
+        if `htype' == 1 global h0_type "h_type_exact==1"
+        if `htype' == 2 global h0_type "h_type_exact==2"
+        if `htype' == 3 global h0_type "h_type_exact<."
 
-		foreach andflag in 1 2 {
-			global flag_iden_only = `andflag'
-			ereturn clear
-			estimates clear
-			eststo clear
+        local label = cond(`htype'==1, "Examined in Prior Studies", ///
+                           cond(`htype'==2, "Augmented Using Ideological Differences", "All Identities and Ideologies"))
 
-			do 5_f_joint_RD_testing.do
-		}
-			local chi_iden_str = "\$\chi^2$(`=string(df_iden)') = `=string(chi_iden,"%4.2f")'"
-			local chi_ideo_str = "\$\chi^2$(`=string(df_ideo)') = `=string(chi_ideo,"%4.2f")'"
-			local p_iden_str = string(p_iden,"%4.3f")
-			local p_ideo_str = string(p_ideo,"%4.3f")
+        foreach andflag in 1 2 {
+            global flag_iden_only = `andflag'
+            ereturn clear
+            estimates clear
+            eststo clear
 
-			file write myfile "`label'" ///
-				"  & `p_iden_str'" ///
-				"  & `p_ideo_str' \\\\" _n
-	}
+            do 5_f_joint_RD_testing_new.do
+        }
 
-	file write myfile "\bottomrule" _n
-	file write myfile "\end{tabular}" _n
-	file close myfile
+        local chi_iden_str = "\$\chi^2$(`=string(df_iden)') = `=string(chi_iden,"%4.2f")'"
+        local chi_ideo_str = "\$\chi^2$(`=string(df_ideo)') = `=string(chi_ideo,"%4.2f")'"
+        local p_iden_str = string(p_iden,"%4.3f")
+        local p_ideo_str = string(p_ideo,"%4.3f")
+
+        file write myfile "`label'  & `p_iden_str'  & `p_ideo_str' \\\\" _n
+    }
+
+    file write myfile "\bottomrule" _n
+    file write myfile "\end{tabular}" _n
+    file close myfile

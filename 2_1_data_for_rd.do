@@ -15,8 +15,8 @@ set more off
 set matsize 5000
 set emptycells drop
 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
 
 global list_demo = "hisp female occ_teacher democrat_v2"
 global list_prio ="equity_prior budget_hawk agenda_bias parent_involvement cte_prior dropout_prior enrollment_prior facility_prior safety_health_prior teacher_care sup_concern score_concern"
@@ -26,7 +26,7 @@ global tab_opt = "b(a3) se(3) scalars(cl_l cl_h pval bw N_eff ymean ysd) label s
 local today : di %td date("$S_DATE", "DMY")
 log using "$logpath/2_rd_1stStage_`today'.log", replace
 
-global missing = "with_missing" // "with_missing" or "no_missing"
+global missing = "no_missing" // "with_missing" or "no_missing"
 
 
 ********************************************************************************
@@ -425,6 +425,19 @@ global candChar = "`x'" // characteristics of candidate of interest?
 	}
 	drop if dist_cnty==1
 	save "data_for_rd/$missing/dist_stacked.dta", replace
+	
+	
+	use "data_for_rd/$missing/female.dta", clear
+    ren vote_margin m_female 
+
+    foreach x in hisp occ_teacher democrat_v2 $list_prio {
+        merge 1:1 multi_raceid year using "data_for_rd/$missing/`x'.dta", gen(_`x')
+        ren vote_margin m_`x'
+    }
+
+    drop if dist_cnty==1
+
+    save "data_for_rd/$missing/stacked.dta", replace
 	
 
 ********************************************************************************

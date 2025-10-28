@@ -10,7 +10,7 @@ set seed 1234
 clear all
 eststo clear
 
-	use "Temp/data_for_rd_stacked.dta", clear
+	use "Temp/data_for_rd_stacked_new.dta", clear
 	
 	* Define categories
 	local filters h_type_exact==1 prio~=demo&h_type_exact~=1 prio==demo
@@ -37,7 +37,7 @@ eststo clear
 			local coef_sign = coef_sign[`j']
 
 			preserve
-				use "Temp/data_for_rd_stacked.dta", clear
+				use "Temp/data_for_rd_stacked_new.dta", clear
 				gen outcome_D = `yvar'_D * `coef_sign'
 				gen vote_margin = m_`xvar'
 				gen outcome_l = `yvar'* `coef_sign'
@@ -110,7 +110,7 @@ eststo clear
 		estadd scalar N_eff = round(e(N_h_l) + e(N_h_r)	,1)
 		estadd scalar ymean = e(beta_Y_p_l)[1,1]		
 
-		esttab using "Results/Tex/rd_robust_`f'.tex", replace ///
+		esttab using "Results/New_Tex/rd_robust_`f'.tex", replace ///
 		cells("b(fmt(3))") ///
 		stats(CI Bandwidth N_eff, labels("" "Bandwidth" "N") fmt("%s" 3 0 3)) ///
 		coeflabels(RD_Estimate "Estimate") ///

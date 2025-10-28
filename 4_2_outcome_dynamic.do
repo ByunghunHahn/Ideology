@@ -9,9 +9,25 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-global grpath ="Results/Graph"
+// cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
+// global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+// global grpath ="Results/Graph"
+
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+global grpath ="Results/New_Graph"
+
+global flag_balance = 0 // 0 if main rd 1 if balance
+if $flag_balance==0 {
+ global year_cond0 = "year>=year_elected & year<=2017" 
+ global year_cond1 = "year>=year_elected"
+ global year_cond2 = "year>=year_elected"
+}	
+else if $flag_balance==1 {
+ global year_cond0 = "year==year_elected-2 & year<=2017" 
+ global year_cond1 = "year==year_elected-2"
+ global year_cond2 = "year<year_elected"
+} 
 
 global y_rev =""
 global y_teacher = ""
@@ -28,7 +44,7 @@ do 0_f_rd_plots
 ********************************************************************************
 
 foreach x in budget_hawk equity_prior hisp {
-	use "data_for_rd/with_missing/dist_`x'.dta", clear
+	use "data_for_rd/with_missing/`x'.dta", clear
 
 	g necd_test = (cs_mn_nec_mth+cs_mn_nec_ela)/2
 
@@ -121,12 +137,12 @@ foreach x in budget_hawk equity_prior hisp {
 	plot_rd_dynamic, yvar("ecd_test") ytitle("Low-income Test Score (vs. t=-1)") ///
 	ylabel(-0.05(0.05)0.1) flag_animation(1) ypos(0.1) ///
  legend(legend(order(1 `"Equity-focused Win"' 2 `"Lose"') pos(6) col(2) size(med))) 
-	gr export "Results/Graph/rd_dynamic_equity_test_1.png", replace
+	gr export "Results/New_Graph/rd_dynamic_equity_test_1.png", replace
 
 	plot_rd_dynamic, yvar("ecd_test") ytitle("Low-income Test Score (vs. t=-1)") ///
 	ylabel(-0.04(0.02)0.08) ypos(0.08) ///
  legend(legend(order(1 `"Equity-focused Win"' 3 `"Lose"') pos(6) col(2) size(med))) name("rd_dynamic_equity_test")
-	gr export "Results/Graph/rd_dynamic_equity_test.png", replace
+	gr export "Results/New_Graph/rd_dynamic_equity_test.png", replace
 	
 	*** composition itself
 	plot_rd_dynamic, yvar("enrollment_black_share") ytitle("{&Delta}Share Black") ///
@@ -140,8 +156,8 @@ foreach x in budget_hawk equity_prior hisp {
 
 	plot_rd_dynamic, yvar("perecd") ytitle("{&Delta}Share ECD") ///
  legend(legend(order(1 `"Equity-focused Win"' 3 `"Lose"') pos(6) col(2) size(med) ring(0))) ypos(0.1) name("rd_dynamic_perecd")
-	graph combine "Results/Graph/rd_dynamic_enrollment_black_share.gph" "Results/Graph/rd_dynamic_enrollment_hisp_share.gph" "Results/Graph/rd_dynamic_perfrl.gph" "Results/Graph/rd_dynamic_perecd", col(2) ysize(3) xsize(6) ycommon imargin(0 0 0 0)
-	gr export "Results/Graph/rd_dynamic_equity_comp.png", replace
+	graph combine "Results/New_Graph/rd_dynamic_enrollment_black_share.gph" "Results/New_Graph/rd_dynamic_enrollment_hisp_share.gph" "Results/New_Graph/rd_dynamic_perfrl.gph" "Results/New_Graph/rd_dynamic_perecd", col(2) ysize(3) xsize(6) ycommon imargin(0 0 0 0)
+	gr export "Results/New_Graph/rd_dynamic_equity_comp.png", replace
 	
 	*** composition effect?
 	twoway (scatter coef_sum t if y=="ecd_test", color(ebblue) symbol(O)) /// 
@@ -152,7 +168,7 @@ foreach x in budget_hawk equity_prior hisp {
 			ytitle("{&Delta}ECD Test Score",size(medlarge)) xtitle("Relative Time From Election",size(med)) ///
 			ylabel(-0.05(0.05)0.1) /// 
 			legend(order(1 "Equity-focused Win (Total Effect)" 3 "Lose" 4 "Equity-focused Win (Composition Effect)" ) pos(6) col(2) size(med))
-	gr export "Results/Graph/rd_dynamic_equity_test_ecd_comp.png", replace
+	gr export "Results/New_Graph/rd_dynamic_equity_test_ecd_comp.png", replace
 	
 	twoway (scatter coef_sum t if y=="test", color(ebblue) symbol(O)) /// 
 			(pcspike cl_h t cl_l t if y=="test", lc(ebblue) symbol(i)) ///
@@ -163,7 +179,7 @@ foreach x in budget_hawk equity_prior hisp {
 			subtitle(`subttl', size(med) ring(0) pos(12) box) ///
 			ylabel(-0.05(0.05)0.1) /// 
 			legend(order(1 "Equity-focused Win (Total Effect)" 3 "Lose" 4 "Equity-focused Win (Composition Effect)" ) pos(6) col(2) size(med))
-	gr export "Results/Graph/rd_dynamic_equity_test_comp.png", replace
+	gr export "Results/New_Graph/rd_dynamic_equity_test_comp.png", replace
 		
 	
 	*** 3) Hispanic	
@@ -182,12 +198,12 @@ foreach x in budget_hawk equity_prior hisp {
 	plot_rd_dynamic, yvar("ecd_test") ytitle("ECD Test Score (vs. t=-1)") ///
 	ylabel(-0.05(0.05)0.1) flag_animation(1) ypos(0.1) ///
  legend(legend(order(1 `"Equity-focused Win"' 2 `"Lose"') pos(6) col(2) size(med))) 
-	gr export "Results/Graph/rd_dynamic_equity_test_1.png", replace
+	gr export "Results/New_Graph/rd_dynamic_equity_test_1.png", replace
 
 	plot_rd_dynamic, yvar("ecd_test") ytitle("ECD Test Score (vs. t=-1)") ///
 	ylabel(-0.05(0.05)0.1) ypos(0.1) ///
  legend(legend(order(1 `"Hispanic Win"' 3 `"Lose"') pos(6) col(2) size(med))) name("rd_dynamic_hisp_test")
-	gr export "Results/Graph/rd_dynamic_hisp_test.png", replace
+	gr export "Results/New_Graph/rd_dynamic_hisp_test.png", replace
 	
 	graph combine "$grpath/rd_dynamic_fiscal_exp.gph" "$grpath/rd_dynamic_equity_test.gph" "$grpath/rd_dynamic_hisp_test.gph" , col(1) ysize(2) xsize(1) imargin(0 0 0 0)
 gr export "$grpath/rd_outcome_dynamic_case_study.png", replace // width(600) height(1200)
@@ -195,5 +211,5 @@ gr export "$grpath/rd_outcome_dynamic_case_study.png", replace // width(600) hei
 	plot_rd_dynamic, yvar("exp_total_per_stu") ytitle("Spending Per Pupil (vs. t=-1, $1k)") ///
 	ylabel(-2(1)3) ypos(3) ///
  legend(legend(order(1 `"Hispanic Win"' 3 `"Lose"') pos(6) col(2) size(med))) name("rd_dynamic_hisp_exp")
-	gr export "Results/Graph/rd_dynamic_hisp_exp.png", replace
+	gr export "Results/New_Graph/rd_dynamic_hisp_exp.png", replace
 	

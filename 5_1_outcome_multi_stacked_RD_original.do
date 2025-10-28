@@ -4,8 +4,8 @@
 ********************************************************************************
 
 	version 18.5
-	clear all
-	set seed 1234
+clear all
+set seed 1234
 
 * set directory 
 cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
@@ -34,7 +34,7 @@ global flag_balance =0
 * I. Store Stacked Data
 ********************************************************************************
 
-	use "$datapath/stacked.dta", clear
+	use "$datapath/dist_stacked.dta", clear
 	
 	tostring id_district_nces, replace  // Convert to string if not already	
 	gen leaid = string(real(id_district_nces), "%07.0f")  // Adjust "8" to the required width
@@ -77,7 +77,7 @@ global flag_balance =0
 
 	
 	keep if year>=year_elected
-	save "Temp/data_for_rd_stacked_new.dta", replace
+	save "Temp/data_for_rd_stacked.dta", replace
 	
 	
 ********************************************************************************
@@ -116,7 +116,7 @@ global flag_balance =0
 			local coef_sign = coef_sign[`j']
 
 			preserve
-				use Temp/data_for_rd_stacked_new.dta, clear
+				use Temp/data_for_rd_stacked.dta, clear
 				gen outcome_D = `yvar'_D *`coef_sign'
 				gen vote_margin  = m_`xvar'
 				gen prio_diff = winner_`prio'
@@ -170,7 +170,7 @@ global flag_balance =0
 	global tab_opt = "b(a2) se(2) scalars(cl_l cl_h pval bw N_eff ymean) label star(+ 0.1 * 0.05 ** 0.01)"
 
 	esttab, $tab_opt
-	* gr combine "Results/New_Graph/rd_stacked_h_type_exact==1.gph" "Results/New_Graph/rd_stacked_h_type==2.gph" "Results/New_Graph/rd_stacked_demo==prio.gph", col(3) imargin(0 0 0 0) xsize(5) ysize(2.5)
+	gr combine "Results/Graph/rd_stacked_h_type_exact==1.gph" "Results/Graph/rd_stacked_h_type==2.gph" "Results/Graph/rd_stacked_demo==prio.gph", col(3) imargin(0 0 0 0) xsize(5) ysize(2.5)
 	
 	
 	* Save matrix as dataset for graphing
@@ -195,7 +195,7 @@ global flag_balance =0
 , ytitle("Mean Effect on Standardized Outcomes", size(medlarge)) ///
   legend(order( 5 "Identities (existing lit.)" 1 "Identities (augmented)" 3 "Ideologies") col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(-0.05(0.05)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar.png",replace
+	gr export "Results/Graph/rd_outcome_bar.png",replace
 	
 	
 	twoway (bar c4 group if group==2, barwidth(0.7) color(dkorange) ///
@@ -210,7 +210,7 @@ global flag_balance =0
 , ytitle("Mean Effect on Standardized Outcomes", size(medlarge)) ///
   legend(order( 5 "Identities (existing lit.)" 1 "Identities (augmented)" 3 "Ideologies") col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(-0.05(0.05)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar_joint.png",replace	
+	gr export "Results/Graph/rd_outcome_bar_joint.png",replace	
 	
 
 	/* for presentation animation
@@ -224,7 +224,7 @@ global flag_balance =0
   4 "Identities (other)"  ///
   8 "Ideologies" ) col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(-0.05(0.05)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar_joint_0.png",replace	
+	gr export "Results/Graph/rd_outcome_bar_joint_0.png",replace	
 	
 	twoway (bar c1 group if group==2, barwidth(0.7) color(dkorange%50)) ///
     (bar c1 group if group==3, barwidth(0.7) color(ebblue%50)) ///
@@ -240,7 +240,7 @@ global flag_balance =0
   4 "Identities (other)"  ///
   8 "Ideologies" ) col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(-0.05(0.05)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar_joint_1.png",replace	
+	gr export "Results/Graph/rd_outcome_bar_joint_1.png",replace	
 	
 	
 	twoway (bar c1 group if group==2, barwidth(0.7) color(dkorange%50)) ///
@@ -260,13 +260,13 @@ global flag_balance =0
   4 "Identities (other)"  ///
   6 "Ideologies" ) col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(-0.05(0.05)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar_joint_2.png",replace	
+	gr export "Results/Graph/rd_outcome_bar_joint_2.png",replace	
 	
 	*/
 ********************************************************************************
 * III. Run Stacked Data with Valid Platform Cases
 ********************************************************************************	
-	use "data_for_rd/no_missing/stacked.dta", clear
+	use "data_for_rd/no_missing/dist_stacked.dta", clear
 	
 	tostring id_district_nces, replace  // Convert to string if not already	
 	gen leaid = string(real(id_district_nces), "%07.0f")  // Adjust "8" to the required width
@@ -308,7 +308,7 @@ global flag_balance =0
 
 	
 	keep if year>=year_elected
-	save "Temp/data_for_rd_stacked_nomissing_new.dta", replace
+	save "Temp/data_for_rd_stacked_nomissing.dta", replace
 	
 
 	* Define categories
@@ -334,7 +334,7 @@ global flag_balance =0
 			local coef_sign = coef_sign[`j']
 
 			preserve
-				use Temp/data_for_rd_stacked_nomissing_new.dta, clear
+				use Temp/data_for_rd_stacked_nomissing.dta, clear
 				gen outcome_D = `yvar'_D * `coef_sign'
 				gen vote_margin  = m_`xvar'
 				gen pair_id = `j'
@@ -377,6 +377,6 @@ global flag_balance =0
 , ytitle("Mean Effect on Standardized Outcomes", size(medlarge)) ///
   legend(order( 1 "Ideologies"  3 "Ideologies (Only with Valid Platform)") col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0)) ylabel(0(0)0.2)
-	gr export "Results/New_Graph/rd_outcome_bar_valid.png",replace
+	gr export "Results/Graph/rd_outcome_bar_valid.png",replace
 
 *log c

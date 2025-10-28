@@ -8,9 +8,9 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-global grpath ="Results/Graph"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+global grpath ="Results/New_Graph"
 
 global flag_balance =0
 
@@ -34,7 +34,7 @@ global class "entry ba60"
 	program define rd_tab
 	  syntax, y(string) x(string) [yearcond(string)]
 			
-		use "data_for_rd/with_missing/dist_`x'.dta", clear
+		use "data_for_rd/with_missing/`x'.dta", clear
 
 		ren *vocational* *cte*
 		g log_enrollment=log(enrollment)

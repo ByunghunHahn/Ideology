@@ -12,9 +12,9 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-global grpath ="Results/Graph"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+global grpath ="Results/New_Graph"
 
 global y_rev =""
 global y_teacher = ""
@@ -33,9 +33,9 @@ global flag_balance =0
 ********************************************************************************
 
 foreach x in budget_hawk equity_prior hisp {
-	use "data_for_rd/with_missing/dist_`x'.dta", clear
+	use "data_for_rd/with_missing/`x'.dta", clear
 
-	do 4_f_prep_rd
+	do 4_f_prep_rd_new
 	
 	*** 2/ Run RDs
 	rdrobust test_D vote_margin if year>=year_elected
@@ -109,7 +109,7 @@ clear
 
 	* Step 6: Open LaTeX file
 	* Step 6: Open LaTeX file for original format
-	file open myfile using "Results/Tex/outcome_summary.tex", write replace
+	file open myfile using "Results/New_Tex/outcome_summary.tex", write replace
 
 	file write myfile "\begin{tabular}{rccc} \toprule \hline" _n
 	file write myfile " & Equity & Fiscally Conservatism &  Hispanic \\" _n

@@ -10,9 +10,13 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-global grpath ="Results/Graph"
+// cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
+// global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+// global grpath ="Results/Graph"
+
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+global grpath ="Results/New_Graph"
 
 global flag_balance = 0 // 0 if main rd 1 if balance
 if $flag_balance==0 {
@@ -49,8 +53,9 @@ program define rd_plot_wrapper
 		[flag_balance(integer 0)] [level(integer 0)] ///
 		[weights(string)]
  
- use "data_for_rd/with_missing/dist_`data'.dta", clear
-
+ // use "data_for_rd/with_missing/dist_`data'.dta", clear
+ use "data_for_rd/with_missing/`data'.dta", clear
+ 
  * prep y vars 
  do 4_f_prep_rd
  

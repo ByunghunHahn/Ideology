@@ -34,7 +34,7 @@ global y_behv = ""
 	program define rd_tab
 	  syntax, y(string) x(string) [yearcond(string)] [extra(int 0)] [noyearcond(int 0)]
 			
-		use "data_for_rd/with_missing/`x'.dta", clear
+		use "data_for_rd/with_missing/dist_`x'.dta", clear
 
 		ren *vocational* *cte*
 		g log_enrollment=log(enrollment)
@@ -138,7 +138,7 @@ global y_behv = ""
 	
 	
 	eststo clear 
-	rd_tab, y("exp_total_per_stu") x("budget_hawk") yearcond("& year<=2017") extra(1) noyearcond(1)
+	rd_tab, y("exp_total_per_stu") x("budget_hawk") yearcond("& year<=2017") extra(1) 
 	
 	esttab using "Results/New_Tex/rd_spending_budget_extra.tex", replace ///
     cells("b(fmt(3))") ///
