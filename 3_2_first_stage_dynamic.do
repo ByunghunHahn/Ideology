@@ -7,8 +7,8 @@
 	set seed 1234
 
 	* set directory 
-	cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-	global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+	cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+    global logpath "New_Logs"
 
 	* setting
 	global flag_balance =0 // 0 if main rd 1 if balance
@@ -31,7 +31,7 @@
 	syntax, y(string) x(string)
     display "Starting rd_dynamic with y=`y' x=`x'"
     
-    use "data_for_rd/$missing/dist_`x'.dta", clear
+    use "data_for_rd/$missing/`x'.dta", clear
     
     ren id_district_nces leaid
     tostring leaid, replace
@@ -79,7 +79,7 @@
 		}
 	end
 
-	use "data_for_rd/$missing/dist_budget_hawk.dta", clear
+	use "data_for_rd/$missing/budget_hawk.dta", clear
 	rdrobust ecd_test vote_margin if year>=year_elected, p(1) kernel(triangular) bwselect(mserd) vce(hc0)
 	regsave using "Results/first_dynamic", replace
 
@@ -112,7 +112,7 @@
     ytitle("Share of Fiscally Conservative (vs. t=-1)") ///
     legend(legend(order(1 `"Fiscally Conservative Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
     xlabel(-3(1)4) ylabel(-0.2(0.1)0.3) ypos(0.2) flag_animation(0) name("first_stage_dynamic_budget_hawk")
-	gr export "Results/Graph/first_stage_dynamic_budget_hawk.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_budget_hawk.png", replace
 	restore
 	
 	preserve
@@ -121,7 +121,7 @@
     ytitle("Share of Equity-focused (vs. t=-1)") ///
     legend(legend(order(1 `"Equity-focused Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
     xlabel(-3(1)4) ylabel(-0.2(0.1)0.3) ypos(0.2) flag_animation(0) name("first_stage_dynamic_equity_prior")
-	gr export "Results/Graph/first_stage_dynamic_equity_prior.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_equity_prior.png", replace
 	restore	
 
 	preserve
@@ -130,7 +130,7 @@
     ytitle("Share of Fiscally Conservative (vs. t=-1)") ///
     legend(legend(order(1 `"Hispanic Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
      xlabel(-3(1)4) ylabel(-0.2(0.1)0.3) ypos(0.2) flag_animation(0) name("first_stage_dynamic_budget_hawk_hisp")
-	gr export "Results/Graph/first_stage_dynamic_budget_hawk_hisp.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_budget_hawk_hisp.png", replace
 	restore	
 	
 	preserve
@@ -139,7 +139,7 @@
     ytitle("Share of Equity-focused (vs. t=-1)") ///
     legend(legend(order(1 `"Hispanic Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
      xlabel(-3(1)4) ypos(0.2) flag_animation(0) name("first_stage_dynamic_equity_prior_hisp")
-	gr export "Results/Graph/first_stage_dynamic_equity_prior_hisp.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_equity_prior_hisp.png", replace
 	restore	
 	
 	preserve
@@ -148,7 +148,7 @@
     ytitle("Share of Fiscal Conservatism (vs. t=-1)") ///
     legend(legend(order(1 `"Female Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
      xlabel(-3(1)4) ypos(0.15) flag_animation(0) name("first_stage_dynamic_budget_hawk_female")
-	gr export "Results/Graph/first_stage_dynamic_budget_hawk_female.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_budget_hawk_female.png", replace
 	restore	
 	
 	preserve
@@ -157,15 +157,15 @@
     ytitle("Share of Equity-focused (vs. t=-1)") ///
     legend(legend(order(1 `"Female Win"' 3 `"Lose"') pos(6) col(2) size(med))) ///
      xlabel(-3(1)4) ypos(0.3) flag_animation(0) name("first_stage_dynamic_equity_prior_female")
-	gr export "Results/Graph/first_stage_dynamic_equity_prior_female.png", replace
+	gr export "Results/New_Graph/first_stage_dynamic_equity_prior_female.png", replace
 	restore	
 	
-	graph combine "Results/Graph/first_stage_dynamic_budget_hawk.gph" "Results/Graph/first_stage_dynamic_equity_prior.gph" "Results/Graph/first_stage_dynamic_equity_prior_hisp.gph" , col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
-	gr export "Results/Graph/first_stage_dynamic_case_study.png", replace
+	graph combine "Results/New_Graph/first_stage_dynamic_budget_hawk.gph" "Results/New_Graph/first_stage_dynamic_equity_prior.gph" "Results/New_Graph/first_stage_dynamic_equity_prior_hisp.gph" , col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
+	gr export "Results/New_Graph/first_stage_dynamic_case_study.png", replace
 	
-	graph combine "Results/Graph/first_stage_dynamic_budget_hawk_female.gph" "Results/Graph/first_stage_dynamic_budget_hawk_hisp.gph" "Results/Graph/first_stage_dynamic_budget_hawk.gph", col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
-	gr export "Results/Graph/first_stage_dynamic_budget_hawk_3panel.png", replace
+	graph combine "Results/New_Graph/first_stage_dynamic_budget_hawk_female.gph" "Results/New_Graph/first_stage_dynamic_budget_hawk_hisp.gph" "Results/New_Graph/first_stage_dynamic_budget_hawk.gph", col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
+	gr export "Results/New_Graph/first_stage_dynamic_budget_hawk_3panel.png", replace
 
-	graph combine "Results/Graph/first_stage_dynamic_equity_prior_female.gph" "Results/Graph/first_stage_dynamic_equity_prior_hisp.gph" "Results/Graph/first_stage_dynamic_equity_prior.gph", col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
-	gr export "Results/Graph/first_stage_dynamic_equity_prior_3panel.png", replace
+	graph combine "Results/New_Graph/first_stage_dynamic_equity_prior_female.gph" "Results/New_Graph/first_stage_dynamic_equity_prior_hisp.gph" "Results/New_Graph/first_stage_dynamic_equity_prior.gph", col(1) ysize(2) xsize(1) imargin(0 0 0 0) ycommon
+	gr export "Results/New_Graph/first_stage_dynamic_equity_prior_3panel.png", replace
 	

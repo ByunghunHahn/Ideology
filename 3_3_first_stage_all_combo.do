@@ -8,8 +8,9 @@ version 18.5
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
+
 
 	global list_demo = "hisp female occ_teacher democrat_v2"
 	global list_prio ="budget_hawk equity_prior safety_health_prior teacher_care agenda_bias parent_involvement score_concern facility_prior cte_prior dropout_prior enrollment_prior sup_concern"
@@ -21,7 +22,7 @@ global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
 if $flag_RD == 1 {
 		
 	* placeholder - dummy result to gerate .dta file
-	use "data_for_rd/$missing/dist_hisp.dta", clear
+	use "data_for_rd/$missing/hisp.dta", clear
 	rdrobust log_exp_pupils vote_margin if year==year_elected-1 , p(1) kernel(triangular) bwselect(mserd) 
 	regsave using "Results/first_stage_$missing", replace
 	
@@ -31,7 +32,7 @@ if $flag_RD == 1 {
 
 	foreach xvar in $list_demo $list_prio {
 		
-		use "data_for_rd/$missing/dist_`xvar'.dta", clear
+		use "data_for_rd/$missing/`xvar'.dta", clear
 
 			ren id_district_nces leaid
 			tostring leaid, replace  // Convert to string if not already
@@ -71,7 +72,7 @@ if $flag_RD == 1 {
 
 foreach xvar in $list_demo {
 
-		use "data_for_rd/$missing/dist_`xvar'.dta" if dist_cnty~=1, clear
+		use "data_for_rd/$missing/`xvar'.dta" if dist_cnty~=1, clear
 
 		*** merge with minute data
 		// Ensure consistent width by adding leading zeros
@@ -182,7 +183,7 @@ foreach xvar in $list_demo {
 	  text(0.18 0.215 "Equity", size(medlarge)) ///
 	  text(0.23 0.165 "Budget", size(medlarge)) ///	  
 	  text(0.25 0.23 "45° line", place(e) size(medlarge))  
-	 gr export "Results/Graph/first_stage_2d_all_$missing.png", replace
+	 gr export "Results/New_Graph/first_stage_2d_all_$missing.png", replace
 	 
 	 *** the rest is for animation in presentation
 	 * same as above but case studies labeled only 
@@ -199,7 +200,7 @@ foreach xvar in $list_demo {
 	  text(0.18 0.215 "Equity", size(medlarge)) ///
 	  text(0.23 0.165 "Budget", size(medlarge)) ///	  
 	  text(0.25 0.23 "45° line", place(e) size(medlarge)) 
-	  gr export "Results/Graph/first_stage_2d_casestudy.png", replace
+	  gr export "Results/New_Graph/first_stage_2d_casestudy.png", replace
 	 
 	  
 	 twoway (scatter coef coef_p if demo=="equity_prior", color(ebblue) symbol(T)) ///
@@ -210,7 +211,7 @@ foreach xvar in $list_demo {
 	  xsc(r(0 0.25)) ysc(r(-0.1 0.3)) xlabel(0(0.05)0.25) ylabel(-0.1(0.1)0.3) ///
 	  text(0.18 0.215 "Equity", size(medlarge)) ///
 	  yline(0.198)
-	 gr export "Results/Graph/first_stage_2d_casestudy1.png", replace
+	 gr export "Results/New_Graph/first_stage_2d_casestudy1.png", replace
 	 
 	 twoway (scatter coef coef_p if prio==demo & casestudy!="", color(ebblue) symbol(T)) ///
 			(pcspike cl_h coef_p cl_l coef_p if prio==demo & casestudy!="", lc(ebblue) symbol(i)) ///	
@@ -221,7 +222,7 @@ foreach xvar in $list_demo {
 	  text(0.18 0.215 "Equity", size(medlarge)) ///
 	   text(0.23 0.165 "Budget", size(medlarge)) ///
 	  yline(0.198) yline(0.16) 
-	 gr export "Results/Graph/first_stage_2d_casestudy2.png", replace
+	 gr export "Results/New_Graph/first_stage_2d_casestudy2.png", replace
 	 
 	 twoway (scatter coef coef_p if prio==demo & casestudy!="", color(ebblue) symbol(T)) ///
 			(pcspike cl_h coef_p cl_l coef_p if prio==demo & casestudy!="", lc(ebblue) symbol(i)) ///	
@@ -236,7 +237,7 @@ foreach xvar in $list_demo {
 	  text(0.03 0.045 "Hispanic→Equity", size(medlarge)) ///
 	  text(-0.01 0.033 "Hispanic→Budget", size(medlarge)) /// 
 	  yline(0.198) yline(0.16) yline(0.004) yline(0.019)
-	 gr export "Results/Graph/first_stage_2d_casestudy3.png", replace
+	 gr export "Results/New_Graph/first_stage_2d_casestudy3.png", replace
 	 
 	 twoway (scatter coef coef_p if prio~=demo, color(dkorange) symbol(O)) ///
 			(pcspike cl_h coef_p cl_l coef_p if prio~=demo, lc(dkorange) symbol(i) ) ///
@@ -255,7 +256,7 @@ foreach xvar in $list_demo {
 	  text(-0.01 0.033 "Hispanic→Budget", size(medlarge)) ///
 	  text(0.18 0.215 "Equity", size(medlarge)) ///
 	  text(0.23 0.165 "Budget", size(medlarge))
-		gr export "Results/Graph/first_stage_2d_casestudy4.png", replace
+		gr export "Results/New_Graph/first_stage_2d_casestudy4.png", replace
 	  
 	 
 	 twoway (scatter coef coef_p if prio==demo & casestudy!="", color(ebblue) symbol(T)) ///
@@ -272,5 +273,5 @@ foreach xvar in $list_demo {
 	  text(0.23 0.165 "Budget", size(medlarge)) ///	  
 	  text(0.25 0.23 "45° line", place(e) size(medlarge)) ///
 	  xline(0.0075) xline(0.0175)
-	  gr export "Results/Graph/first_stage_2d_casestudy5.png", replace
+	  gr export "Results/New_Graph/first_stage_2d_casestudy5.png", replace
 	 

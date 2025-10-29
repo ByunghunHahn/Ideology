@@ -11,9 +11,9 @@
 	set seed 1234
 
 	* set directory 
-	cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-	global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-
+	cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+    global logpath "New_Logs"
+	
 	* setting
 	global flag_balance =0 // 0 if main rd 1 if balance
 	if $flag_balance==0 {
@@ -69,10 +69,10 @@
 	program define rd_plot_wrapper
 	  syntax, y(string) x(string) ylab(string) [ytitle(string)] [xtitle(string)] [subtitle(string)] [cluster(string)] [xrange(string asis)] [name(string)] [level(integer 0)]
 	   
-		use "data_for_rd/$missing/dist_`x'.dta" if dist_cnty~=1, clear
+		use "data_for_rd/$missing/`x'.dta" if dist_cnty~=1, clear
 		
 		* prep y vars 
-		do 4_f_prep_rd
+		do 4_f_prep_rd_new
 		
 		* merge with board composition data 
 		merge m:1 leaid year using "Temp/board_composition.dta", keep(master matched) gen(_comp)
@@ -96,17 +96,17 @@
 
 	* equity 
 	rd_plot_wrapper, y("equity_prior") x("equity_prior") ylab("-0.2(0.1)0.3, labsize(*1.5)") ytitle("ytitle(""Share of Equity-focused (vs. t=-1)"", size(*1.5))") xtitle("xtitle(""Vote Margin of Equity-focused (pp)"", size(*1.5))") cluster("cluster") xrange(15) name("first_stage_equity_prior") level(0)
-	gr export "Results/Graph/first_stage_equity_prior.png", replace 
+	gr export "Results/New_Graph/first_stage_equity_prior.png", replace 
 
 	rd_plot_wrapper, y("equity_prior") x("hisp") ylab("-0.2(0.1)0.3, labsize(*1.5)") ytitle("ytitle(""Share of Equity-focused (vs. t=-1)"", size(*1.5))") xtitle("xtitle(""Vote Margin of Hispanic"", size(*1.5))") cluster("cluster") xrange(15) name("first_stage_equity_prior_hisp")
-	gr export "Results/Graph/first_stage_equity_prior_hisp.png", replace
+	gr export "Results/New_Graph/first_stage_equity_prior_hisp.png", replace
 	
 	* budget - budget 
 	rd_plot_wrapper, y("budget_hawk") x("budget_hawk") ylab("-0.2(0.1)0.3, labsize(*1.5)") ytitle("ytitle(""Share of Fiscally Conservative (vs. t=-1)"", size(*1.5))") xtitle("xtitle(""Vote Margin of Fiscally Conservative"", size(*1.5))") cluster("cluster") xrange(15) name("first_stage_budget_hawk")
-	gr export "Results/Graph/first_stage_budget_hawk.png", replace 
+	gr export "Results/New_Graph/first_stage_budget_hawk.png", replace 
 
 	rd_plot_wrapper, y("budget_hawk") x("hisp") ylab("-0.2(0.1)0.3, labsize(*1.5)") ytitle("ytitle(""Share of Fiscally Conservative (vs. t=-1)"", size(*1.5))") xtitle("xtitle(""Vote Margin of Hispanic"", size(*1.5))") cluster("cluster") xrange(15) name("first_stage_budget_hawk_hisp")
-	gr export "Results/Graph/first_stage_budget_hawk_hisp.png", replace 
+	gr export "Results/New_Graph/first_stage_budget_hawk_hisp.png", replace 
 
 ********************************************************************************
 * III. Simple Table	
@@ -116,7 +116,7 @@
 	program define rd_first_tab
 	  syntax, y(string) x(string)
 		
-		use "data_for_rd/$missing/dist_`x'.dta", clear
+		use "data_for_rd/$missing/`x'.dta", clear
 
 		ren id_district_nces leaid
 		tostring leaid, replace  // Convert to string if not already
@@ -157,7 +157,7 @@
 		rd_first_tab, y("`y'") x("`y'")
 	}
 
-	esttab using "Results/Tex/first_stage.tex", replace ///
+	esttab using "Results/New_Tex/first_stage.tex", replace ///
     cells("b(fmt(3))") ///
     stats(CI Bandwidth N_eff, labels( " " "Bandwidth" "N") fmt("%s" 3 0)) ///
     coeflabels(RD_Estimate "Estimate") ///

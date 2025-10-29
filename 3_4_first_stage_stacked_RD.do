@@ -3,8 +3,8 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
 
 global list_demo = "hisp female occ_teacher democrat_v2"
 global list_prio ="equity_prior budget_hawk agenda_bias parent_involvement cte_prior dropout_prior enrollment_prior facility_prior safety_health_prior teacher_care sup_concern score_concern"
@@ -17,7 +17,7 @@ global datapath = "data_for_rd/$missing"
 * I. Run Super-stacked RD
 ********************************************************************************
 
-	use "$datapath/dist_stacked.dta", clear
+	use "$datapath/stacked.dta", clear
 	
 	tostring id_district_nces, replace  // Convert to string if not already	
 	gen leaid = string(real(id_district_nces), "%07.0f")  // Adjust "8" to the required width
@@ -121,4 +121,4 @@ global datapath = "data_for_rd/$missing"
   legend(order( 5 "Identities (existing lit.)" 1 "Identities (augmented)" 3 "Ideologies") col(3) pos(6) size(medlarge)) ///
   xtitle("") xla(, labcolor(bg) tlength(0))
 
-	gr export "Results/Graph/first_stage_bar.png",replace			
+	gr export "Results/New_Graph/first_stage_bar.png",replace			

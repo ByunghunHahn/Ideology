@@ -12,9 +12,9 @@
 	* ssc install rforest
 
 	* set directory 
-	cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-	global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
-	global graph "~/Library/CloudStorage/Dropbox/California Election Data/Code/Results/Graph"
+	cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+	global logpath "New_Logs"
+	global grpath ="Results/New_Graph"
 	global tab_opt = "dec(2) pdec(2) label"
 
 	global flag_close = 0 // 0: all 1: close elctions
