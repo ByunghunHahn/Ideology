@@ -389,9 +389,9 @@ texdoc init "Results/New_Tex/voting_own_table.tex", replace force
 // texdoc write \caption{Voting Analysis by Category}
 // texdoc write \resizebox{\textwidth}{!}{%
 texdoc write \label{tab:voting_analysis}
-texdoc write \begin{tabular}{lccccccc}
+texdoc write \begin{tabular}{lcccccc}
 texdoc write \toprule \midrule
-texdoc write & & \multicolumn{2}{c}{Equity} & \multicolumn{2}{c}{Fiscal} & \multicolumn{2}{c}{Hispanic} \\
+texdoc write & \multicolumn{2}{c}{Equity} & \multicolumn{2}{c}{Fiscal} & \multicolumn{2}{c}{Hispanic} \\
 texdoc write \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
 texdoc write &  Focal & All & Focal & All & Equity & Fiscal \\
 texdoc write \midrule

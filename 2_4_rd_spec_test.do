@@ -16,8 +16,8 @@ clear all
 set seed 1234
 
 * set directory 
-cd "~/Library/CloudStorage/Dropbox/California Election Data/Code"
-global logpath "~/Library/CloudStorage/Dropbox/California Election Data/Logs"
+cd "C:\Users\hahn0\Desktop\Hahn_Park\Code"
+global logpath "New_Logs"
 
 global y_rev =""
 global y_fiscal= "rev_cte_per_stu exp_total_per_stu exp_capital_total_per_stu bond_amount_per_stu"
@@ -107,7 +107,7 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 	restore	
 
 	* Now export the results
-	file open myfile using "Results/Tex/rd_spec_test.tex", write replace
+	file open myfile using "Results/New_Tex/rd_spec_test.tex", write replace
 	file write myfile "\begin{tabular}{lcccccc}" _n
 	file write myfile "\toprule \hline" _n
 	file write myfile "& \multicolumn{3}{c}{Case-Study Characteristics} & \multicolumn{3}{c}{Aggregates Across All Characteristics}\\ \cmidrule(l{0.5cm}){2-4} \cmidrule(l{0.5cm}){5-7}" _n
@@ -136,15 +136,15 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 	}
 
 	* Histogram of p-values
-	histogram pvals, bin(10) frequency xtitle("p-values")
-	gr export "Results/Graph/mccrary_pvals.png", replace	
+	histogram pvals, bin(10) frequency fcolor(purple*1.3) lcolor(black) xtitle("p-values")
+	gr export "Results/New_Graph/mccrary_pvals.png", replace	
 
 	
 ********************************************************************************
 * II. Prep to Run Stacked RDs
 ********************************************************************************
 
-	use "$datapath/dist_stacked.dta", clear
+	use "$datapath/stacked.dta", clear
 	
 	rddensity m_hisp if year==year_elected, pl plot_range(-25 25) plot_n(100 100)
     local pv = round(e(pv_q), .01)
@@ -154,7 +154,7 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 	
 	rddensity m_hisp if year==year_elected, pl plot_range(-25 25) plot_n(100 100) ///
 	graph_opt(xtitle("Vote Margin") title("Hispanic") ytitle("Density") legend(off) note("p-value = `pv',  N = `N'", ring(0) pos(1) size(*1.5)) xline(`h_l' `h_r')) $graph_opt 
-	gr save "Results/Graph/density_test_hisp", replace
+	gr save "Results/New_Graph/density_test_hisp", replace
 	
 	rddensity m_budget_hawk if year==year_elected, pl plot_range(-25 25) plot_n(100 100)
     local pv = round(e(pv_q), .01)
@@ -164,7 +164,7 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 	
 	rddensity m_budget_hawk if year==year_elected, pl plot_range(-25 25) plot_n(100 100) ///
 	graph_opt(xtitle("Vote Margin") title("Fiscally Conservative") ytitle("Density") legend(off) note("p-value = `pv',  N = `N'", ring(0) pos(1) size(*1.5)) xline(`h_l' `h_r')) $graph_opt 
-	gr save "Results/Graph/density_test_budget_hawk", replace
+	gr save "Results/New_Graph/density_test_budget_hawk", replace
 	
 	rddensity m_equity_prior if year==year_elected, pl plot_range(-25 25) plot_n(100 100)
     local pv = round(e(pv_q), .01)
@@ -174,10 +174,10 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 	
 	rddensity m_equity_prior if year==year_elected, pl plot_range(-25 25) plot_n(100 100) ///
 	graph_opt(xtitle("Vote Margin") title("Equity") ytitle("Density") legend(off) note("p-value = `pv',  N = `N'", ring(0) pos(1) size(*1.5)) xline(`h_l' `h_r')) $graph_opt 
-	gr save "Results/Graph/density_test_equity", replace
+	gr save "Results/New_Graph/density_test_equity", replace
 		
-	gr combine "Results/Graph/density_test_budget_hawk" "Results/Graph/density_test_equity" "Results/Graph/density_test_hisp" , col(3) imargin(zero) ysize(2) iscale(1.2)
-	   gr export "Results/Graph/density_test_$missing.png", replace
+	gr combine "Results/New_Graph/density_test_budget_hawk" "Results/New_Graph/density_test_equity" "Results/New_Graph/density_test_hisp" , col(3) imargin(zero) ysize(2) iscale(1.2)
+	   gr export "Results/New_Graph/density_test_$missing.png", replace
 	   
 	tostring id_district_nces, replace  // Convert to string if not already	
 	gen leaid = string(real(id_district_nces), "%07.0f")  // Adjust "8" to the required width
@@ -195,7 +195,7 @@ global graph_opt ="esll_opt(lcolor(ebblue*2) lwidth(med)) eslr_opt(lcolor(dkoran
 		drop z
 	}
 	
-	do 4_f_prep_rd
+	do 4_f_prep_rd_new
 
 
 ********************************************************************************
